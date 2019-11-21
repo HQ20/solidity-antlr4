@@ -32,15 +32,33 @@ importDirective
   | 'import' ('*' | identifier) ('as' identifier)? 'from' StringLiteral ';'
   | 'import' '{' importDeclaration ( ',' importDeclaration )* '}' 'from' StringLiteral ';' ;
 
-NatSpecSingleLine
-  : ('///' .*? [\r\n]) + ;
+fragment
+NatSpecKeyword
+  : '@'
+  ( 'title'
+  | 'author'
+  | 'notice'
+  | 'dev'
+  | 'param'
+  | 'return'
+  ) ;
 
-NatSpecMultiLine
-  : '/**' .*? '*/' ;
+fragment
+NatSpecLineBreak
+  : [\r\n]? ;
+
+fragment
+NatSpecLineSpace
+  : [ \t*]* ;
+
+NatSpecSingleLineComment
+  : ([ \t]* '///' ~[\r\n]* [\r\n]?) + ;
+
+NatSpecMultilineComment
+  : '/**' NatSpecLineBreak (NatSpecLineSpace NatSpecKeyword .+? NatSpecLineBreak)* '*/' ;
 
 natSpec
-  : NatSpecSingleLine
-  | NatSpecMultiLine ;
+  : NatSpecSingleLineComment | NatSpecMultilineComment ;
 
 contractDefinition
   : natSpec? ( 'contract' | 'interface' | 'library' ) identifier
@@ -69,14 +87,14 @@ usingForDeclaration
   : 'using' identifier 'for' ('*' | typeName) ';' ;
 
 structDefinition
-  : 'struct' identifier
+  : natSpec? 'struct' identifier
     '{' ( variableDeclaration ';' (variableDeclaration ';')* )? '}' ;
 
 constructorDefinition
   : 'constructor' parameterList modifierList block ;
 
 modifierDefinition
-  : 'modifier' identifier parameterList? block ;
+  : natSpec? 'modifier' identifier parameterList? block ;
 
 modifierInvocation
   : identifier ( '(' expressionList? ')' )? ;

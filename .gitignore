@@ -1,0 +1,4 @@
+# after running test script
+antlr4.jar
+src/
+target/

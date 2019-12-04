@@ -91,7 +91,7 @@ structDefinition
     '{' ( variableDeclaration ';' (variableDeclaration ';')* )? '}' ;
 
 constructorDefinition
-  : 'constructor' parameterList modifierList block ;
+  : natSpec? 'constructor' parameterList modifierList block ;
 
 modifierDefinition
   : natSpec? 'modifier' identifier parameterList? block ;

@@ -52,7 +52,7 @@ NatSpecLineSpace
   : [ \t*]* ;
 
 NatSpecSingleLineComment
-  : ([ \t]* '///' ~[\r\n]* [\r\n]?) + ;
+  : (NatSpecLineSpace '///' ~[\r\n]* [\r\n]?) + ;
 
 NatSpecMultilineComment
   : '/**' NatSpecLineBreak (NatSpecLineSpace NatSpecKeyword .+? NatSpecLineBreak)* '*/' ;
@@ -79,7 +79,7 @@ contractPart
   | enumDefinition ;
 
 stateVariableDeclaration
-  : typeName
+  : natSpec? typeName
     ( PublicKeyword | InternalKeyword | PrivateKeyword | ConstantKeyword )*
     identifier ('=' expression)? ';' ;
 
